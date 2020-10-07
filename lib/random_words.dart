@@ -13,6 +13,7 @@ class _RandomWordsState extends State<RandomWords> {
 	final List<WordPair> _suggestions = <WordPair>[];
 	final Set<WordPair> _saved = Set<WordPair>();
 	final TextStyle _biggerFont = const TextStyle(fontSize: 18);
+	final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 	
 	@override
 	Widget build(BuildContext context) {
@@ -57,13 +58,13 @@ class _RandomWordsState extends State<RandomWords> {
 						IconButton(
 							icon: Icon(Icons.list),
 							onPressed: _pushSaved,
-						)
+						),
 					],
 				),
 			),
 			body: Builder(
-					builder: (ctx) => _buildSuggestions(ctx),
-				),
+				builder: (ctx) => _buildSuggestions(ctx),
+			),
 		);
 	}
 
@@ -125,9 +126,18 @@ class _RandomWordsState extends State<RandomWords> {
 				builder: (BuildContext context) {
 					final tiles = _saved.map(
 						(WordPair pair) => ListTile(
-							title: Text(
+							title: SelectableText(
 								pair.asPascalCase,
-								style: _biggerFont
+								style: _biggerFont,
+								onTap: () {
+									final toCopy = pair.asPascalCase;
+									Clipboard.setData(new ClipboardData(text: toCopy))
+									.then((_) {
+										final snack = SnackBar(content: Text('$toCopy copied to clipboard!'));
+										_scaffoldKey.currentState.hideCurrentSnackBar();
+										_scaffoldKey.currentState.showSnackBar(snack);
+									});
+								},
 							),
 						)
 					);
@@ -138,6 +148,7 @@ class _RandomWordsState extends State<RandomWords> {
 					).toList();
 
 					return Scaffold(
+						key: _scaffoldKey,
 						appBar: AppBar(
 							title: Text('Saved Suggestions')
 						),
