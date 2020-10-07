@@ -11,44 +11,54 @@ class RandomWords extends StatefulWidget {
 
 class _RandomWordsState extends State<RandomWords> {
 	final List<WordPair> _suggestions = <WordPair>[];
+	final Set<WordPair> _saved = Set<WordPair>();
 	final TextStyle _biggerFont = const TextStyle(fontSize: 18);
 	
 	@override
 	Widget build(BuildContext context) {
 		return Scaffold(
-			appBar: AppBar(
-				backgroundColor: Colors.red[400],
-				title: Column(
-					crossAxisAlignment: CrossAxisAlignment.start,
-					mainAxisAlignment: MainAxisAlignment.center,
-					children: [
-						Text(
-							'Startup Name Generator',
-							style: TextStyle(fontSize: 21),
-						),
-						RichText(
-							text: TextSpan(
-								style: TextStyle(fontSize: 13),
-								children: [
-									TextSpan(
-										text: 'Made with ❤ by ',
-									),
-									TextSpan(
-										text: 'Param',
-										recognizer: TapGestureRecognizer()
-										..onTap = () {
-											final webs = 'http://www.paramsid.com';
-											launch(webs);
-										},
-										style: TextStyle(
-											decoration: TextDecoration.underline,
-											color: Colors.blue[200]
-										)
-									),
-								]
+			appBar: PreferredSize(
+				preferredSize: Size.fromHeight(62),
+				child: AppBar(
+					title: Column(
+						crossAxisAlignment: CrossAxisAlignment.start,
+						mainAxisAlignment: MainAxisAlignment.center,
+						children: [
+							Text(
+								'Startup Name Generator',
+								style: TextStyle(fontSize: 23),
 							),
+							RichText(
+								text: TextSpan(
+									style: TextStyle(fontSize: 13),
+									children: [
+										TextSpan(
+											text: 'Made with ❤ by ',
+										),
+										TextSpan(
+											text: 'Param',
+											recognizer: TapGestureRecognizer()
+											..onTap = () {
+												final webs = 'http://www.paramsid.com';
+												launch(webs);
+											},
+											style: TextStyle(
+												decoration: TextDecoration.underline,
+												color: Colors.blue[200]
+											)
+										),
+									]
+								),
+							)
+						]
+					),
+					backgroundColor: Colors.green[600],
+					actions: [
+						IconButton(
+							icon: Icon(Icons.list),
+							onPressed: _pushSaved,
 						)
-					]
+					],
 				),
 			),
 			body: Builder(
@@ -76,6 +86,8 @@ class _RandomWordsState extends State<RandomWords> {
 	}
 
 	Widget _buildRow(WordPair pair, BuildContext ctx) {
+		final alreadySaved = _saved.contains(pair);
+
 		return ListTile(
 			title: SelectableText(
 				pair.asPascalCase,
@@ -89,6 +101,49 @@ class _RandomWordsState extends State<RandomWords> {
 						Scaffold.of(ctx).showSnackBar(snack);
 					});
 				},
+			),
+			trailing: IconButton(
+				icon: Icon(
+					alreadySaved ? Icons.favorite : Icons.favorite_border,
+					color: alreadySaved ? Colors.red : null,
+				),
+				onPressed: () {
+					setState(() {
+						if (alreadySaved)
+							_saved.remove(pair);
+						else
+							_saved.add(pair);
+					});
+				},
+			)
+		);
+	}
+
+	void _pushSaved() {
+		Navigator.of(context).push(
+			MaterialPageRoute<void>(
+				builder: (BuildContext context) {
+					final tiles = _saved.map(
+						(WordPair pair) => ListTile(
+							title: Text(
+								pair.asPascalCase,
+								style: _biggerFont
+							),
+						)
+					);
+
+					final divided = ListTile.divideTiles(
+						tiles: tiles,
+						context: context
+					).toList();
+
+					return Scaffold(
+						appBar: AppBar(
+							title: Text('Saved Suggestions')
+						),
+						body: ListView(children: divided),
+					);
+				}
 			)
 		);
 	}
