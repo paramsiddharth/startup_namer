@@ -10,10 +10,10 @@ class RandomWords extends StatefulWidget {
 }
 
 class _RandomWordsState extends State<RandomWords> {
-  static final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+	static final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 	final List<WordPair> _suggestions = <WordPair>[];
 	final TextStyle _biggerFont = const TextStyle(fontSize: 18);
-  final Set<WordPair> _saved = Set<WordPair>();
+	final Set<WordPair> _saved = Set<WordPair>();
 	
 	@override
 	Widget build(BuildContext context) {
@@ -36,13 +36,13 @@ class _RandomWordsState extends State<RandomWords> {
 										TextSpan(
 											text: 'Made with ',
 										),
-                    WidgetSpan(
-                      child: Icon(
-                        Icons.favorite,
-                        color: Colors.red[700],
-                        size: 16,
-                      ),
-                    ),
+										WidgetSpan(
+											child: Icon(
+												Icons.favorite,
+												color: Colors.red[700],
+												size: 16,
+											),
+										),
 										TextSpan(
 											text: ' by ',
 										),
@@ -131,100 +131,100 @@ class _RandomWordsState extends State<RandomWords> {
 	}
 
 	void _pushSaved() {
-    Navigator.of(context).push(MaterialPageRoute<void>(
-        builder: (BuildContext context) {
-            final tiles = _saved.map(
-              (WordPair pair) => ListTile(
-                title: SelectableText(
-                  pair.asPascalCase,
-                  style: _biggerFont,
-                  onTap: () {
-                    final toCopy = pair.asPascalCase;
-                    Clipboard.setData(new ClipboardData(text: toCopy))
-                    .then((_) {
-                      final snack = SnackBar(content: Text('$toCopy copied to clipboard!'));
-                      _scaffoldKey.currentState.hideCurrentSnackBar();
-                      _scaffoldKey.currentState.showSnackBar(snack);
-                    });
-                  },
-                ),
-                /* trailing: IconButton(
-                  icon: Icon(Icons.delete_forever_outlined),
-                  onPressed: () {
-                    setState(() {
-                      _saved.remove(pair);
-                      // Navigator.of(context).pop();
-                      // _pushSaved();
-                    });
-                    // _rePushSaved();
-                  },
-                ), */
-              )
-            );
+		Navigator.of(context).push(MaterialPageRoute<void>(
+				builder: (BuildContext context) {
+						final tiles = _saved.map(
+							(WordPair pair) => ListTile(
+								title: SelectableText(
+									pair.asPascalCase,
+									style: _biggerFont,
+									onTap: () {
+										final toCopy = pair.asPascalCase;
+										Clipboard.setData(new ClipboardData(text: toCopy))
+										.then((_) {
+											final snack = SnackBar(content: Text('$toCopy copied to clipboard!'));
+											_scaffoldKey.currentState.hideCurrentSnackBar();
+											_scaffoldKey.currentState.showSnackBar(snack);
+										});
+									},
+								),
+								/* trailing: IconButton(
+									icon: Icon(Icons.delete_forever_outlined),
+									onPressed: () {
+										setState(() {
+											_saved.remove(pair);
+											// Navigator.of(context).pop();
+											// _pushSaved();
+										});
+										// _rePushSaved();
+									},
+								), */
+							)
+						);
 
-            final divided = ListTile.divideTiles(
-              tiles: tiles,
-              context: context
-            ).toList();
+						final divided = ListTile.divideTiles(
+							tiles: tiles,
+							context: context
+						).toList();
 
-            return Scaffold(
-              key: _scaffoldKey,
-              appBar: AppBar(
-                title: Text('Saved Suggestions')
-              ),
-              body: ListView(children: divided),
-            );
-        }
-      )
-    );
+						return Scaffold(
+							key: _scaffoldKey,
+							appBar: AppBar(
+								title: Text('Saved Suggestions')
+							),
+							body: ListView(children: divided),
+						);
+				}
+			)
+		);
 	}
 }
 
 /* class SavedSuggestions extends StatefulWidget {
-  @override
-  _SavedSuggestionsState createState() => _SavedSuggestionsState();
+	@override
+	_SavedSuggestionsState createState() => _SavedSuggestionsState();
 }
 
 class _SavedSuggestionsState extends State<SavedSuggestions> {
-  @override
-  Widget build(BuildContext context) {
-    final tiles = _saved.map(
-      (WordPair pair) => ListTile(
-        title: SelectableText(
-          pair.asPascalCase,
-          style: _biggerFont,
-          onTap: () {
-            final toCopy = pair.asPascalCase;
-            Clipboard.setData(new ClipboardData(text: toCopy))
-            .then((_) {
-              final snack = SnackBar(content: Text('$toCopy copied to clipboard!'));
-              _scaffoldKey.currentState.hideCurrentSnackBar();
-              _scaffoldKey.currentState.showSnackBar(snack);
-            });
-          },
-        ),
-        trailing: IconButton(
-          icon: Icon(Icons.delete_forever_outlined),
-          onPressed: () {
-            setState(() {
-              _saved.remove(pair);
-            });
-          },
-        ),
-      )
-    );
+	@override
+	Widget build(BuildContext context) {
+		final tiles = _saved.map(
+			(WordPair pair) => ListTile(
+				title: SelectableText(
+					pair.asPascalCase,
+					style: _biggerFont,
+					onTap: () {
+						final toCopy = pair.asPascalCase;
+						Clipboard.setData(new ClipboardData(text: toCopy))
+						.then((_) {
+							final snack = SnackBar(content: Text('$toCopy copied to clipboard!'));
+							_scaffoldKey.currentState.hideCurrentSnackBar();
+							_scaffoldKey.currentState.showSnackBar(snack);
+						});
+					},
+				),
+				trailing: IconButton(
+					icon: Icon(Icons.delete_forever_outlined),
+					onPressed: () {
+						setState(() {
+							_saved.remove(pair);
+						});
+					},
+				),
+			)
+		);
 
-    final divided = ListTile.divideTiles(
-      tiles: tiles,
-      context: context
-    ).toList();
+		final divided = ListTile.divideTiles(
+			tiles: tiles,
+			context: context
+		).toList();
 
-    return Scaffold(
-      key: _scaffoldKey,
-      appBar: AppBar(
-        title: Text('Saved Suggestions')
-      ),
-      body: ListView(children: divided),
-    );
-  }
+		return Scaffold(
+			key: _scaffoldKey,
+			appBar: AppBar(
+				title: Text('Saved Suggestions')
+			),
+			body: ListView(children: divided),
+		);
+	}
 } */
