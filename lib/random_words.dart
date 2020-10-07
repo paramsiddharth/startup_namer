@@ -1,6 +1,8 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:english_words/english_words.dart';
 import 'package:flutter/services.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class RandomWords extends StatefulWidget {
 	@override
@@ -15,6 +17,7 @@ class _RandomWordsState extends State<RandomWords> {
 	Widget build(BuildContext context) {
 		return Scaffold(
 			appBar: AppBar(
+				backgroundColor: Colors.red[400],
 				title: Column(
 					crossAxisAlignment: CrossAxisAlignment.start,
 					mainAxisAlignment: MainAxisAlignment.center,
@@ -23,9 +26,27 @@ class _RandomWordsState extends State<RandomWords> {
 							'Startup Name Generator',
 							style: TextStyle(fontSize: 21),
 						),
-						Text(
-							'Made with ❤ by Param',
-							style: TextStyle(fontSize: 13),
+						RichText(
+							text: TextSpan(
+								style: TextStyle(fontSize: 13),
+								children: [
+									TextSpan(
+										text: 'Made with ❤ by ',
+									),
+									TextSpan(
+										text: 'Param',
+										recognizer: TapGestureRecognizer()
+										..onTap = () {
+											final webs = 'http://www.paramsid.com';
+											launch(webs);
+										},
+										style: TextStyle(
+											decoration: TextDecoration.underline,
+											color: Colors.blue[200]
+										)
+									),
+								]
+							),
 						)
 					]
 				),
