@@ -15,7 +15,20 @@ class _RandomWordsState extends State<RandomWords> {
 	Widget build(BuildContext context) {
 		return Scaffold(
 			appBar: AppBar(
-				title: Text('Startup Name Generator')
+				title: Column(
+					crossAxisAlignment: CrossAxisAlignment.start,
+					mainAxisAlignment: MainAxisAlignment.center,
+					children: [
+						Text(
+							'Startup Name Generator',
+							style: TextStyle(fontSize: 21),
+						),
+						Text(
+							'Made with ❤ by Param',
+							style: TextStyle(fontSize: 13),
+						)
+					]
+				),
 			),
 			body: Builder(
 					builder: (ctx) => _buildSuggestions(ctx),
